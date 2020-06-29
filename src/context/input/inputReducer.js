@@ -14,15 +14,11 @@ export default (state, action) => {
                 loading: action.payload
             }
         case SET_INPUT_FILENAME:
-            console.log('filename')
-            console.log(action.payload)
             return {
                 ...state,
                 inputFileName: action.payload
             }
         case SET_INPUT_FILE:
-            console.log('file')
-            console.log(action.payload)
             return {
                 ...state,
                 inputFile: action.payload

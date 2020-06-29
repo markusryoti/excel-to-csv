@@ -22,19 +22,17 @@ const InputState = props => {
     const readExcel = file => {
         _setLoading(true);
 
-        let workbook;
         const reader = new FileReader();
         reader.onload = function(e) {
-          const data = new Uint8Array(e.target.result);
-          workbook = XLSX.read(data, {type: 'array'});
-        //   console.log(workbook.SheetNames);
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            // Add file to state
+            _setInputFile(workbook);
         };
         reader.readAsArrayBuffer(file);
 
         // Update input filename to state
         _setInputFileName(file.name);
-        // Add file to state
-        _setInputFile(workbook);
         _setLoading(false);
     }
 
