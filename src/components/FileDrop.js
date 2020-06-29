@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
-import { readExcel } from '../excel/reader';
+import React, { useState, useContext } from 'react'
+import InputContext from '../context/input/inputContext';
 
 const FileDrop = () => {
+    const inputContext = useContext(InputContext);
+    const { readExcel, inputFile, inputFileName, loading } = inputContext;
+
     const [highlighted, setHighlighted] = useState(false);
 
     const onEnter = () => {
@@ -29,7 +32,10 @@ const FileDrop = () => {
         }
 
         readExcel(file);
+    }
 
+    if (loading) {
+        return <h3>Loading</h3>
     }
 
     return (
