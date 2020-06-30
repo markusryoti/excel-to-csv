@@ -1,9 +1,21 @@
 .App {
-  text-align: center;
 }
 
 .container {
   margin: auto;
+  max-width: 75%;
+  text-align: center;
+}
+
+.file-drop-container {
+  margin-bottom: 75px;
+}
+
+.drag-box {
+  margin: auto;
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
 }
 
 .dragged-box {
@@ -13,4 +25,32 @@
 
 .un-dragged-box {
   background-color: #fff;
+}
+
+.sheet-selector-container {
+  margin-bottom: 75px;
+}
+
+.label-selector-container {
+  margin-bottom: 75px;
+}
+
+.label-selector-container ul li {
+  text-align: left;
+  list-style: none;
+}
+
+.labels-box {
+  padding-top: 45px;
+  width: 100%;
+  margin: auto;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.labels-box div {
+  margin: 1px;
+  border: 1px solid #474747;
+  border-collapse: collapse;
+  width: 50%;
 }

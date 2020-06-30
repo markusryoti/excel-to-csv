@@ -2,63 +2,98 @@ import React, { useReducer } from 'react';
 import InputContext from './inputContext';
 import inputReducer from './inputReducer';
 import {
-    SET_INPUT_FILENAME,
-    SET_INPUT_FILE,
-    SET_LOADING
+  SET_INPUT_FILENAME,
+  SET_INPUT_FILE,
+  SET_LOADING,
+  SET_SHEET_NAME,
+  SET_ROW_DATA,
 } from '../types';
 
 import XLSX from 'xlsx';
 
+const InputState = (props) => {
+  const initialState = {
+    inputFileName: null,
+    inputFile: null,
+    sheetName: null,
+    loading: false,
+    rowData: null,
+  };
 
-const InputState = props => {
-    const initialState = {
-        inputFileName: null,
-        inputFile: null,
-        loading: false
+  const [state, dispatch] = useReducer(inputReducer, initialState);
+
+  const readExcel = (file) => {
+    _setLoading(true);
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      // Add file to state
+      _setInputFile(workbook);
     };
+    reader.readAsArrayBuffer(file);
 
-    const [state, dispatch] = useReducer(inputReducer, initialState);
+    // Update input filename to state
+    _setInputFileName(file.name);
+    _setLoading(false);
+  };
 
-    const readExcel = file => {
-        _setLoading(true);
+  const _setLoading = (bool) => {
+    dispatch({ type: SET_LOADING, payload: bool });
+  };
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            // Add file to state
-            _setInputFile(workbook);
-        };
-        reader.readAsArrayBuffer(file);
+  const _setInputFileName = (name) => {
+    dispatch({ type: SET_INPUT_FILENAME, payload: name });
+  };
 
-        // Update input filename to state
-        _setInputFileName(file.name);
-        _setLoading(false);
-    }
+  const _setInputFile = (fileObj) => {
+    dispatch({ type: SET_INPUT_FILE, payload: fileObj });
+  };
 
-    const _setLoading = bool => {
-        dispatch({ type: SET_LOADING, payload: bool });
-    }
+  // TODO Not reading the data properly
+  const _setRowData = (name) => {
+    const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name]);
+    let dataTable = [];
+    excelRows.forEach((row) => {
+      const rowValues = Object.values(row);
+      dataTable.push(rowValues);
+    });
+    // console.table(dataTable);
+    dispatch({ type: SET_ROW_DATA, payload: dataTable });
+  };
 
-    const _setInputFileName = name => {
-        dispatch({ type: SET_INPUT_FILENAME, payload: name });
-    }
+  const setSheetName = (name) => {
+    dispatch({ type: SET_SHEET_NAME, payload: name });
+    _setRowData(name);
+  };
 
-    const _setInputFile = fileObj => {
-        dispatch({ type: SET_INPUT_FILE, payload: fileObj });
-    }
+  const getLabels = (searchParam) => {
+    const srcLabels = state.rowData[0];
+    const filtered = srcLabels.filter((label) => {
+      if (label.toLowerCase().includes(searchParam.toLowerCase())) {
+        return true;
+      }
+      return false;
+    });
+    return filtered;
+  };
 
-    return (
-        <InputContext.Provider
-            value={{
-                inputFileName: state.inputFileName,
-                inputFile: state.inputFile,
-                readExcel
-            }}
-        >
-            {props.children}
-        </InputContext.Provider>
-    )
-}
+  return (
+    <InputContext.Provider
+      value={{
+        inputFileName: state.inputFileName,
+        inputFile: state.inputFile,
+        sheetName: state.sheetName,
+        rowData: state.rowData,
+        readExcel,
+        setSheetName,
+        getLabels,
+      }}
+    >
+      {props.children}
+    </InputContext.Provider>
+  );
+};
 
 export default InputState;
