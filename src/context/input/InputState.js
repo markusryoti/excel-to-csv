@@ -51,9 +51,10 @@ const InputState = (props) => {
     dispatch({ type: SET_INPUT_FILE, payload: fileObj });
   };
 
-  // TODO Not reading the data properly
   const _setRowData = (name) => {
-    const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name]);
+    const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
+      defval: 'N/A',
+    });
     let dataTable = [];
     excelRows.forEach((row) => {
       const rowValues = Object.values(row);
