@@ -99,12 +99,6 @@ const LabelSelector = () => {
           type="text"
           id="label-search"
           placeholder="Search For Label Name"
-          style={{
-            display: "block",
-            margin: "auto",
-            width: "400px",
-            height: "30px",
-          }}
           ref={searchValue}
           onChange={onInputChange}
         />

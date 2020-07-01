@@ -6,7 +6,6 @@ import {
   SET_ROW_DATA,
   SET_SELECTED_LABELS,
 } from "../types";
-import { act } from "react-dom/test-utils";
 
 export default (state, action) => {
   switch (action.type) {
