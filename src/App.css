@@ -1,6 +1,10 @@
 .App {
 }
 
+h3 {
+  margin-bottom: 40px;
+}
+
 .container {
   margin: auto;
   max-width: 75%;
@@ -82,4 +86,32 @@
 
 .labels-to-add-section {
   cursor: pointer;
+}
+
+.file-save-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 75px;
+}
+
+#separator-selector {
+  width: 200px;
+  height: 30px;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+#output-filename {
+  display: block;
+  margin: auto;
+  width: 400px;
+  height: 30px;
+  margin-bottom: 20px;
+}
+
+#download-button {
+  width: 150px;
+  height: 50px;
+  margin-bottom: 20px;
 }

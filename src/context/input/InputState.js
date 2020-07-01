@@ -111,6 +111,19 @@ const InputState = (props) => {
     dispatch({ type: SET_SELECTED_LABELS, payload: labelArray });
   };
 
+  const createFile = (filename, separator) => {
+    console.log(filename, separator);
+    if (!filename.includes(".xlsx")) {
+      filename += ".xlsx";
+    }
+
+    let fileContent = "";
+    state.rowData.forEach((rowArray) => {
+      const row = rowArray.join(separator);
+      fileContent += row + "\n";
+    });
+  };
+
   return (
     <InputContext.Provider
       value={{
@@ -124,6 +137,7 @@ const InputState = (props) => {
         getAllLabels,
         getLabels,
         saveSelectedLabels,
+        createFile,
       }}
     >
       {props.children}
