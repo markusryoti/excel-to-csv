@@ -4,7 +4,9 @@ import {
   SET_LOADING,
   SET_SHEET_NAME,
   SET_ROW_DATA,
-} from '../types';
+  SET_SELECTED_LABELS,
+} from "../types";
+import { act } from "react-dom/test-utils";
 
 export default (state, action) => {
   switch (action.type) {
@@ -34,6 +36,11 @@ export default (state, action) => {
         rowData: action.payload,
         // Maybe to free memory?
         // inputFile: null,
+      };
+    case SET_SELECTED_LABELS:
+      return {
+        ...state,
+        savedLabels: action.payload,
       };
     default:
       return state;

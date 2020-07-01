@@ -31,6 +31,11 @@
   margin-bottom: 75px;
 }
 
+.search-selection-controls {
+  display: inline-flex;
+  justify-content: center;
+}
+
 .label-selector-container {
   margin-bottom: 75px;
 }
@@ -53,4 +58,12 @@
   border: 1px solid #474747;
   border-collapse: collapse;
   width: 50%;
+}
+
+.filtered-labels-section {
+  cursor: pointer;
+}
+
+.labels-to-add-section {
+  cursor: pointer;
 }

@@ -7,6 +7,7 @@ import {
   SET_LOADING,
   SET_SHEET_NAME,
   SET_ROW_DATA,
+  SET_SELECTED_LABELS,
 } from "../types";
 
 import XLSX from "xlsx";
@@ -18,6 +19,7 @@ const InputState = (props) => {
     sheetName: null,
     loading: false,
     rowData: null,
+    savedLabels: null,
   };
 
   const [state, dispatch] = useReducer(inputReducer, initialState);
@@ -86,6 +88,14 @@ const InputState = (props) => {
     _setRowData(name);
   };
 
+  const getAllLabels = () => {
+    if (state.rowData !== null) {
+      return state.rowData[0];
+    } else {
+      return [];
+    }
+  };
+
   const getLabels = (searchParam) => {
     const srcLabels = state.rowData[0];
     const filtered = srcLabels.filter((label) => {
@@ -97,6 +107,10 @@ const InputState = (props) => {
     return filtered;
   };
 
+  const saveSelectedLabels = (labelArray) => {
+    dispatch({ type: SET_SELECTED_LABELS, payload: labelArray });
+  };
+
   return (
     <InputContext.Provider
       value={{
@@ -104,9 +118,12 @@ const InputState = (props) => {
         inputFile: state.inputFile,
         sheetName: state.sheetName,
         rowData: state.rowData,
+        savedLabels: state.savedLabels,
         readExcel,
         setSheetName,
+        getAllLabels,
         getLabels,
+        saveSelectedLabels,
       }}
     >
       {props.children}
