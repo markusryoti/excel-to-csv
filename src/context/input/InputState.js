@@ -1,15 +1,15 @@
-import React, { useReducer } from 'react';
-import InputContext from './inputContext';
-import inputReducer from './inputReducer';
+import React, { useReducer } from "react";
+import InputContext from "./inputContext";
+import inputReducer from "./inputReducer";
 import {
   SET_INPUT_FILENAME,
   SET_INPUT_FILE,
   SET_LOADING,
   SET_SHEET_NAME,
   SET_ROW_DATA,
-} from '../types';
+} from "../types";
 
-import XLSX from 'xlsx';
+import XLSX from "xlsx";
 
 const InputState = (props) => {
   const initialState = {
@@ -28,7 +28,7 @@ const InputState = (props) => {
     const reader = new FileReader();
     reader.onload = function (e) {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, { type: "array" });
       // Add file to state
       _setInputFile(workbook);
     };
@@ -52,14 +52,31 @@ const InputState = (props) => {
   };
 
   const _setRowData = (name) => {
-    const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
-      defval: 'N/A',
-    });
     let dataTable = [];
-    excelRows.forEach((row) => {
-      const rowValues = Object.values(row);
-      dataTable.push(rowValues);
+
+    const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
+      defval: "N/A",
     });
+
+    // TODO
+    // Seems that windows version reads the file differently
+    // Test later if it was just because the used file was different
+    // Contents will be saved to same format if they differ
+    if (window.navigator.platform === "Win32") {
+      const labels = Object.keys(excelRows[0]);
+      dataTable.push(labels);
+      excelRows.forEach((row, index) => {
+        if (index !== 0) {
+          const rowValues = Object.values(row);
+          dataTable.push(rowValues);
+        }
+      });
+    } else {
+      excelRows.forEach((row) => {
+        const rowValues = Object.values(row);
+        dataTable.push(rowValues);
+      });
+    }
     // console.table(dataTable);
     dispatch({ type: SET_ROW_DATA, payload: dataTable });
   };
