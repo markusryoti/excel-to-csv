@@ -1,12 +1,12 @@
-import React, { useContext, Fragment, useRef } from "react";
-import InputContext from "../context/input/inputContext";
+import React, { useContext, Fragment, useRef } from 'react';
+import FileContext from '../context/file/fileContext';
 
 const FileSave = () => {
-  const inputContext = useContext(InputContext);
-  const { inputFileName, savedLabels, createFile } = inputContext;
+  const fileContext = useContext(FileContext);
+  const { inputFileName, savedLabels, createFile } = fileContext;
 
-  const separator = useRef("");
-  const outputFileName = useRef("");
+  const separator = useRef('');
+  const outputFileName = useRef('');
 
   if (savedLabels === null || savedLabels.length === 0) {
     return <Fragment />;
@@ -16,7 +16,7 @@ const FileSave = () => {
     const fileName = outputFileName.current.value;
     const sep = separator.current.value;
     createFile(
-      fileName ? fileName : inputFileName.replace(".xlsx", ".csv"),
+      fileName ? fileName : inputFileName.replace('.xlsx', '.csv'),
       sep
     );
   };
@@ -32,7 +32,7 @@ const FileSave = () => {
       <input
         id="output-filename"
         type="text"
-        placeholder={inputFileName.replace(".xlsx", ".csv")}
+        placeholder={inputFileName.replace('.xlsx', '.csv')}
         ref={outputFileName}
       />
       <button id="download-button" onClick={onDownloadClick}>

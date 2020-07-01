@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react";
-import InputContext from "../context/input/inputContext";
+import React, { useState, useContext } from 'react';
+import FileContext from '../context/file/fileContext';
 
 const FileDrop = () => {
-  const inputContext = useContext(InputContext);
-  const { readExcel, loading, inputFileName } = inputContext;
+  const fileContext = useContext(FileContext);
+  const { readExcel, loading, inputFileName } = fileContext;
 
   const [highlighted, setHighlighted] = useState(false);
-  const [iconVisibility, setIconVisibility] = useState("hidden");
+  const [iconVisibility, setIconVisibility] = useState('hidden');
 
   const onEnter = () => {
     setHighlighted(true);
@@ -23,11 +23,11 @@ const FileDrop = () => {
   const onDrop = (e) => {
     e.preventDefault();
     setHighlighted(false);
-    setIconVisibility("visible");
+    setIconVisibility('visible');
 
     const file = Array.from(e.dataTransfer.files)[0];
 
-    if (!file.name.endsWith(".xlsx")) {
+    if (!file.name.endsWith('.xlsx')) {
       window.alert(`File: ${file.name} is not an Excel file`);
       return;
     }
@@ -43,7 +43,7 @@ const FileDrop = () => {
     <div className="file-drop-container">
       <h3>Drop File Here</h3>
       <div
-        className={`drag-box ${highlighted ? "dragged-box" : "un-dragged-box"}`}
+        className={`drag-box ${highlighted ? 'dragged-box' : 'un-dragged-box'}`}
         onDragEnter={onEnter}
         onDragLeave={onLeave}
         onDragOver={onDragOver}
@@ -53,7 +53,7 @@ const FileDrop = () => {
           style={{ visibility: iconVisibility }}
           className="far fa-file-excel fa-5x"
         ></i>
-        <p>{inputFileName ? inputFileName : ""}</p>
+        <p>{inputFileName ? inputFileName : ''}</p>
       </div>
     </div>
   );

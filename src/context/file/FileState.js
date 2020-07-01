@@ -1,24 +1,24 @@
 import React, { useReducer } from 'react';
-import InputContext from './inputContext';
-import inputReducer from './inputReducer';
+import FileContext from './fileContext';
+import inputReducer from './fileReducer';
 import {
   SET_INPUT_FILENAME,
   SET_INPUT_FILE,
   SET_LOADING,
   SET_SHEET_NAME,
-  SET_ROW_DATA,
+  SET_TABLE_DATA,
   SET_SELECTED_LABELS,
 } from '../types';
 
 import XLSX from 'xlsx';
 
-const InputState = (props) => {
+const FileState = (props) => {
   const initialState = {
     inputFileName: null,
     inputFile: null,
     sheetName: null,
     loading: false,
-    rowData: null,
+    tableData: null,
     savedLabels: null,
   };
 
@@ -52,7 +52,7 @@ const InputState = (props) => {
     dispatch({ type: SET_INPUT_FILE, payload: fileObj });
   };
 
-  const _setRowData = (name) => {
+  const _setTableData = (name) => {
     let dataTable = [];
 
     const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
@@ -79,24 +79,24 @@ const InputState = (props) => {
       });
     }
     // console.table(dataTable);
-    dispatch({ type: SET_ROW_DATA, payload: dataTable });
+    dispatch({ type: SET_TABLE_DATA, payload: dataTable });
   };
 
   const setSheetName = (name) => {
     dispatch({ type: SET_SHEET_NAME, payload: name });
-    _setRowData(name);
+    _setTableData(name);
   };
 
   const getAllLabels = () => {
-    if (state.rowData !== null) {
-      return state.rowData[0];
+    if (state.tableData !== null) {
+      return state.tableData[0];
     } else {
       return [];
     }
   };
 
   const getLabels = (searchParam) => {
-    const srcLabels = state.rowData[0];
+    const srcLabels = state.tableData[0];
     const filtered = srcLabels.filter((label) => {
       if (label.toLowerCase().includes(searchParam.toLowerCase())) {
         return true;
@@ -113,14 +113,14 @@ const InputState = (props) => {
   // Not a really sophisticated solution
   const _getFilteredData = () => {
     let filteredData = [];
-    for (let i = 0; i < state.rowData.length; i++) {
+    for (let i = 0; i < state.tableData.length; i++) {
       let row = [];
-      for (let j = 0; j < state.rowData[i].length; j++) {
-        const foundIndex = state.savedLabels.indexOf(state.rowData[0][j]);
+      for (let j = 0; j < state.tableData[i].length; j++) {
+        const foundIndex = state.savedLabels.indexOf(state.tableData[0][j]);
         if (foundIndex === -1) {
           continue;
         }
-        row.push(state.rowData[i][j]);
+        row.push(state.tableData[i][j]);
       }
       filteredData.push(row);
     }
@@ -149,12 +149,12 @@ const InputState = (props) => {
   };
 
   return (
-    <InputContext.Provider
+    <FileContext.Provider
       value={{
         inputFileName: state.inputFileName,
         inputFile: state.inputFile,
         sheetName: state.sheetName,
-        rowData: state.rowData,
+        tableData: state.tableData,
         savedLabels: state.savedLabels,
         readExcel,
         setSheetName,
@@ -165,8 +165,8 @@ const InputState = (props) => {
       }}
     >
       {props.children}
-    </InputContext.Provider>
+    </FileContext.Provider>
   );
 };
 
-export default InputState;
+export default FileState;

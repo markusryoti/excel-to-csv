@@ -1,26 +1,23 @@
-import React from "react";
-import "./App.css";
-import InputState from "./context/input/InputState";
-import OutputState from "./context/output/OutputState";
+import React from 'react';
+import './App.css';
+import InputState from './context/file/FileState';
 
-import FileDrop from "./components/FileDrop";
-import SheetSelector from "./components/SheetSelector";
-import LabelSelector from "./components/LabelSelector";
-import FileSave from "./components/FileSave";
+import FileDrop from './components/FileDrop';
+import SheetSelector from './components/SheetSelector';
+import LabelSelector from './components/LabelSelector';
+import FileSave from './components/FileSave';
 
 function App() {
   return (
     <InputState>
-      <OutputState>
-        <div className="App">
-          <div className="container">
-            <FileDrop />
-            <SheetSelector />
-            <LabelSelector />
-            <FileSave />
-          </div>
+      <div className="App">
+        <div className="container">
+          <FileDrop />
+          <SheetSelector />
+          <LabelSelector />
+          <FileSave />
         </div>
-      </OutputState>
+      </div>
     </InputState>
   );
 }

@@ -4,19 +4,19 @@ import React, {
   useState,
   useEffect,
   useRef,
-} from "react";
-import InputContext from "../context/input/inputContext";
+} from 'react';
+import FileContext from '../context/file/fileContext';
 
 const LabelSelector = () => {
-  const inputContext = useContext(InputContext);
+  const fileContext = useContext(FileContext);
   const {
     sheetName,
     getAllLabels,
     getLabels,
     saveSelectedLabels,
-  } = inputContext;
+  } = fileContext;
 
-  const searchValue = useRef("");
+  const searchValue = useRef('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLabels, setSelectedLabels] = useState([]);
 
@@ -38,7 +38,7 @@ const LabelSelector = () => {
   };
 
   const clearInput = (e) => {
-    searchValue.current.value = "";
+    searchValue.current.value = '';
     setSearchResults(getAllLabels());
   };
 
@@ -71,16 +71,16 @@ const LabelSelector = () => {
   const itemClick = (e) => {
     const element = e.target;
     const parent = element.parentElement.id;
-    const dataIndex = element.getAttribute("data-index");
+    const dataIndex = element.getAttribute('data-index');
 
-    if (parent === "search-results") {
+    if (parent === 'search-results') {
       const name = searchResults[dataIndex];
       if (selectedLabels.indexOf(name) === -1) {
         setSelectedLabels([...selectedLabels, name]);
       }
     }
 
-    if (parent === "selected-labels") {
+    if (parent === 'selected-labels') {
       const newSelected = selectedLabels.filter((_, index) => {
         if (index === parseInt(dataIndex)) {
           return false;
@@ -111,7 +111,7 @@ const LabelSelector = () => {
           <button
             onClick={() => {
               setSearchResults([]);
-              searchValue.current.value = "";
+              searchValue.current.value = '';
             }}
           >
             Hide Labels
@@ -127,17 +127,17 @@ const LabelSelector = () => {
       </div>
       <div className="labels-box">
         <div className="filtered-labels-section">
-          <h4>{searchResults ? searchResults.length : ""} Labels Found </h4>
+          <h4>{searchResults ? searchResults.length : ''} Labels Found </h4>
           <ul id="search-results" onClick={itemClick}>
-            {searchResults ? searchedItems : ""}
+            {searchResults ? searchedItems : ''}
           </ul>
         </div>
         <div className="labels-to-add-section">
           <h4>
-            {selectedLabels ? selectedLabels.length : ""} Labels To Be Added
+            {selectedLabels ? selectedLabels.length : ''} Labels To Be Added
           </h4>
           <ul id="selected-labels" onClick={itemClick}>
-            {selectedLabels ? toBeAddedItems : ""}
+            {selectedLabels ? toBeAddedItems : ''}
           </ul>
         </div>
       </div>

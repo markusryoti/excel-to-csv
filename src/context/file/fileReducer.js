@@ -3,9 +3,9 @@ import {
   SET_INPUT_FILE,
   SET_LOADING,
   SET_SHEET_NAME,
-  SET_ROW_DATA,
+  SET_TABLE_DATA,
   SET_SELECTED_LABELS,
-} from "../types";
+} from '../types';
 
 export default (state, action) => {
   switch (action.type) {
@@ -29,10 +29,10 @@ export default (state, action) => {
         ...state,
         sheetName: action.payload,
       };
-    case SET_ROW_DATA:
+    case SET_TABLE_DATA:
       return {
         ...state,
-        rowData: action.payload,
+        tableData: action.payload,
         // Maybe to free memory?
         // inputFile: null,
       };

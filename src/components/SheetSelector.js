@@ -1,9 +1,9 @@
-import React, { useContext, Fragment } from "react";
-import InputContext from "../context/input/inputContext";
+import React, { useContext, Fragment } from 'react';
+import FileContext from '../context/file/fileContext';
 
 const SheetSelector = () => {
-  const inputContext = useContext(InputContext);
-  const { inputFile, setSheetName } = inputContext;
+  const fileContext = useContext(FileContext);
+  const { inputFile, setSheetName } = fileContext;
 
   if (inputFile === null) {
     return <Fragment />;
