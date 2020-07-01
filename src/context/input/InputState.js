@@ -1,6 +1,6 @@
-import React, { useReducer } from "react";
-import InputContext from "./inputContext";
-import inputReducer from "./inputReducer";
+import React, { useReducer } from 'react';
+import InputContext from './inputContext';
+import inputReducer from './inputReducer';
 import {
   SET_INPUT_FILENAME,
   SET_INPUT_FILE,
@@ -8,9 +8,9 @@ import {
   SET_SHEET_NAME,
   SET_ROW_DATA,
   SET_SELECTED_LABELS,
-} from "../types";
+} from '../types';
 
-import XLSX from "xlsx";
+import XLSX from 'xlsx';
 
 const InputState = (props) => {
   const initialState = {
@@ -30,8 +30,7 @@ const InputState = (props) => {
     const reader = new FileReader();
     reader.onload = function (e) {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      // Add file to state
+      const workbook = XLSX.read(data, { type: 'array' });
       _setInputFile(workbook);
     };
     reader.readAsArrayBuffer(file);
@@ -57,14 +56,14 @@ const InputState = (props) => {
     let dataTable = [];
 
     const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
-      defval: "N/A",
+      defval: 'N/A',
     });
 
     // TODO
     // Seems that windows version reads the file differently
     // Test later if it was just because the used file was different
     // Contents will be saved to same format if they differ
-    if (window.navigator.platform === "Win32") {
+    if (window.navigator.platform === 'Win32') {
       const labels = Object.keys(excelRows[0]);
       dataTable.push(labels);
       excelRows.forEach((row, index) => {
@@ -73,7 +72,7 @@ const InputState = (props) => {
           dataTable.push(rowValues);
         }
       });
-    } else {
+    } else if (window.navigator.platform === 'Linux x86_64') {
       excelRows.forEach((row) => {
         const rowValues = Object.values(row);
         dataTable.push(rowValues);
@@ -111,20 +110,38 @@ const InputState = (props) => {
     dispatch({ type: SET_SELECTED_LABELS, payload: labelArray });
   };
 
+  // Not a really sophisticated solution
+  const _getFilteredData = () => {
+    let filteredData = [];
+    for (let i = 0; i < state.rowData.length; i++) {
+      let row = [];
+      for (let j = 0; j < state.rowData[i].length; j++) {
+        const foundIndex = state.savedLabels.indexOf(state.rowData[0][j]);
+        if (foundIndex === -1) {
+          continue;
+        }
+        row.push(state.rowData[i][j]);
+      }
+      filteredData.push(row);
+    }
+    return filteredData;
+  };
+
   const createFile = (filename, separator) => {
-    console.log(filename, separator);
-    if (!filename.includes(".csv")) {
-      filename += ".csv";
+    if (!filename.includes('.csv')) {
+      filename += '.csv';
     }
 
-    let fileContent = "";
-    state.rowData.forEach((rowArray) => {
+    const filteredData = _getFilteredData();
+
+    let fileContent = '';
+    filteredData.forEach((rowArray) => {
       const row = rowArray.join(separator);
-      fileContent += row + "\n";
+      fileContent += row + '\n';
     });
 
-    const element = document.createElement("a");
-    const file = new Blob([fileContent], { type: "text/plain" });
+    const element = document.createElement('a');
+    const file = new Blob([fileContent], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = filename;
     document.body.appendChild(element); // Required for this to work in FireFox
