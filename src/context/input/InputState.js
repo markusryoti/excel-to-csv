@@ -113,8 +113,8 @@ const InputState = (props) => {
 
   const createFile = (filename, separator) => {
     console.log(filename, separator);
-    if (!filename.includes(".xlsx")) {
-      filename += ".xlsx";
+    if (!filename.includes(".csv")) {
+      filename += ".csv";
     }
 
     let fileContent = "";
@@ -122,6 +122,13 @@ const InputState = (props) => {
       const row = rowArray.join(separator);
       fileContent += row + "\n";
     });
+
+    const element = document.createElement("a");
+    const file = new Blob([fileContent], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = filename;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
   };
 
   return (
