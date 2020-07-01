@@ -108,7 +108,14 @@ const LabelSelector = () => {
             Show Labels
           </button>
         ) : (
-          <button onClick={() => setSearchResults([])}>Hide Labels</button>
+          <button
+            onClick={() => {
+              setSearchResults([]);
+              searchValue.current.value = "";
+            }}
+          >
+            Hide Labels
+          </button>
         )}
         <button
           onClick={() => {
