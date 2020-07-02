@@ -1,6 +1,6 @@
-import React, { useReducer } from 'react';
-import FileContext from './fileContext';
-import inputReducer from './fileReducer';
+import React, { useReducer } from "react";
+import FileContext from "./fileContext";
+import fileReducer from "./fileReducer";
 import {
   SET_INPUT_FILENAME,
   SET_INPUT_FILE,
@@ -8,9 +8,9 @@ import {
   SET_SHEET_NAME,
   SET_TABLE_DATA,
   SET_SELECTED_LABELS,
-} from '../types';
+} from "../types";
 
-import XLSX from 'xlsx';
+import XLSX from "xlsx";
 
 const FileState = (props) => {
   const initialState = {
@@ -22,7 +22,7 @@ const FileState = (props) => {
     savedLabels: null,
   };
 
-  const [state, dispatch] = useReducer(inputReducer, initialState);
+  const [state, dispatch] = useReducer(fileReducer, initialState);
 
   const readExcel = (file) => {
     _setLoading(true);
@@ -30,7 +30,7 @@ const FileState = (props) => {
     const reader = new FileReader();
     reader.onload = function (e) {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, { type: "array" });
       _setInputFile(workbook);
     };
     reader.readAsArrayBuffer(file);
@@ -56,14 +56,14 @@ const FileState = (props) => {
     let dataTable = [];
 
     const excelRows = XLSX.utils.sheet_to_json(state.inputFile.Sheets[name], {
-      defval: 'N/A',
+      defval: "N/A",
     });
 
     // TODO
     // Seems that windows version reads the file differently
     // Test later if it was just because the used file was different
     // Contents will be saved to same format if they differ
-    if (window.navigator.platform === 'Win32') {
+    if (window.navigator.platform === "Win32") {
       const labels = Object.keys(excelRows[0]);
       dataTable.push(labels);
       excelRows.forEach((row, index) => {
@@ -72,7 +72,7 @@ const FileState = (props) => {
           dataTable.push(rowValues);
         }
       });
-    } else if (window.navigator.platform === 'Linux x86_64') {
+    } else if (window.navigator.platform === "Linux x86_64") {
       excelRows.forEach((row) => {
         const rowValues = Object.values(row);
         dataTable.push(rowValues);
@@ -128,20 +128,20 @@ const FileState = (props) => {
   };
 
   const createFile = (filename, separator) => {
-    if (!filename.includes('.csv')) {
-      filename += '.csv';
+    if (!filename.includes(".csv")) {
+      filename += ".csv";
     }
 
     const filteredData = _getFilteredData();
 
-    let fileContent = '';
+    let fileContent = "";
     filteredData.forEach((rowArray) => {
       const row = rowArray.join(separator);
-      fileContent += row + '\n';
+      fileContent += row + "\n";
     });
 
-    const element = document.createElement('a');
-    const file = new Blob([fileContent], { type: 'text/plain' });
+    const element = document.createElement("a");
+    const file = new Blob([fileContent], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
     element.download = filename;
     document.body.appendChild(element); // Required for this to work in FireFox
