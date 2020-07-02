@@ -60,22 +60,20 @@ const FileState = (props) => {
     });
 
     // TODO
-    // Seems that windows version reads the file differently
-    // Test later if it was just because the used file was different
-    // Contents will be saved to same format if they differ
-    if (window.navigator.platform === "Win32") {
-      const labels = Object.keys(excelRows[0]);
+    // Seems that some files are read differently for some reason
+    let labels = Object.keys(excelRows[0]);
+    if (labels[0] === "__EMPTY") {
+      excelRows.forEach((row) => {
+        const rowValues = Object.values(row);
+        dataTable.push(rowValues);
+      });
+    } else {
       dataTable.push(labels);
       excelRows.forEach((row, index) => {
         if (index !== 0) {
           const rowValues = Object.values(row);
           dataTable.push(rowValues);
         }
-      });
-    } else if (window.navigator.platform === "Linux x86_64") {
-      excelRows.forEach((row) => {
-        const rowValues = Object.values(row);
-        dataTable.push(rowValues);
       });
     }
     // console.table(dataTable);
