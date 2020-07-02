@@ -4,8 +4,8 @@ import React, {
   useState,
   useEffect,
   useRef,
-} from 'react';
-import FileContext from '../context/file/fileContext';
+} from "react";
+import FileContext from "../context/file/fileContext";
 
 const LabelSelector = () => {
   const fileContext = useContext(FileContext);
@@ -16,7 +16,7 @@ const LabelSelector = () => {
     saveSelectedLabels,
   } = fileContext;
 
-  const searchValue = useRef('');
+  const searchValue = useRef("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLabels, setSelectedLabels] = useState([]);
 
@@ -38,7 +38,7 @@ const LabelSelector = () => {
   };
 
   const clearInput = (e) => {
-    searchValue.current.value = '';
+    searchValue.current.value = "";
     setSearchResults(getAllLabels());
   };
 
@@ -71,16 +71,16 @@ const LabelSelector = () => {
   const itemClick = (e) => {
     const element = e.target;
     const parent = element.parentElement.id;
-    const dataIndex = element.getAttribute('data-index');
+    const dataIndex = element.getAttribute("data-index");
 
-    if (parent === 'search-results') {
+    if (parent === "search-results") {
       const name = searchResults[dataIndex];
       if (selectedLabels.indexOf(name) === -1) {
         setSelectedLabels([...selectedLabels, name]);
       }
     }
 
-    if (parent === 'selected-labels') {
+    if (parent === "selected-labels") {
       const newSelected = selectedLabels.filter((_, index) => {
         if (index === parseInt(dataIndex)) {
           return false;
@@ -102,22 +102,29 @@ const LabelSelector = () => {
           ref={searchValue}
           onChange={onInputChange}
         />
-        <button onClick={clearInput}>Clear Search</button>
+        <button className="clear-search-button" onClick={clearInput}>
+          Clear Search
+        </button>
         {searchResults.length === 0 ? (
-          <button onClick={() => setSearchResults(getAllLabels())}>
+          <button
+            className="show-button"
+            onClick={() => setSearchResults(getAllLabels())}
+          >
             Show Labels
           </button>
         ) : (
           <button
+            className="hide-button"
             onClick={() => {
               setSearchResults([]);
-              searchValue.current.value = '';
+              searchValue.current.value = "";
             }}
           >
             Hide Labels
           </button>
         )}
         <button
+          className="clear-selected-button"
           onClick={() => {
             setSelectedLabels([]);
           }}
@@ -127,17 +134,17 @@ const LabelSelector = () => {
       </div>
       <div className="labels-box">
         <div className="filtered-labels-section">
-          <h4>{searchResults ? searchResults.length : ''} Labels Found </h4>
+          <h4>{searchResults ? searchResults.length : ""} Labels Found </h4>
           <ul id="search-results" onClick={itemClick}>
-            {searchResults ? searchedItems : ''}
+            {searchResults ? searchedItems : ""}
           </ul>
         </div>
         <div className="labels-to-add-section">
           <h4>
-            {selectedLabels ? selectedLabels.length : ''} Labels To Be Added
+            {selectedLabels ? selectedLabels.length : ""} Labels To Be Added
           </h4>
           <ul id="selected-labels" onClick={itemClick}>
-            {selectedLabels ? toBeAddedItems : ''}
+            {selectedLabels ? toBeAddedItems : ""}
           </ul>
         </div>
       </div>
