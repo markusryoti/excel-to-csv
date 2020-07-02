@@ -102,35 +102,37 @@ const LabelSelector = () => {
           ref={searchValue}
           onChange={onInputChange}
         />
-        <button className="clear-search-button" onClick={clearInput}>
-          Clear Search
-        </button>
-        {searchResults.length === 0 ? (
-          <button
-            className="show-button"
-            onClick={() => setSearchResults(getAllLabels())}
-          >
-            Show Labels
+        <div className="button-div">
+          <button className="clear-search-button" onClick={clearInput}>
+            Clear Search
           </button>
-        ) : (
+          {searchResults.length === 0 ? (
+            <button
+              className="show-button"
+              onClick={() => setSearchResults(getAllLabels())}
+            >
+              Show Labels
+            </button>
+          ) : (
+            <button
+              className="hide-button"
+              onClick={() => {
+                setSearchResults([]);
+                searchValue.current.value = "";
+              }}
+            >
+              Hide Labels
+            </button>
+          )}
           <button
-            className="hide-button"
+            className="clear-selected-button"
             onClick={() => {
-              setSearchResults([]);
-              searchValue.current.value = "";
+              setSelectedLabels([]);
             }}
           >
-            Hide Labels
+            Clear Selected
           </button>
-        )}
-        <button
-          className="clear-selected-button"
-          onClick={() => {
-            setSelectedLabels([]);
-          }}
-        >
-          Clear Selected
-        </button>
+        </div>
       </div>
       <div className="labels-box">
         <div className="filtered-labels-section">
